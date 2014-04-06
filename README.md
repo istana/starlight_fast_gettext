@@ -1,6 +1,18 @@
 # StarlightFastGettext
 
-TODO: Write a gem description
+Simple gem for managing FastGettext translations. It is able to extract translations
+from source code, show untranslated, missing and unused translations and import and export from/to Excel spreadsheet.
+
+## What works
+
+- finding *_()* and *D_()* strings
+- and stuff mentioned in description
+- it is really cool
+
+## Roadmap
+
+- add support for n_() and d_() functions and pluralization
+- perhaps add rake tasks
 
 ## Installation
 
@@ -16,9 +28,9 @@ Or install it yourself as:
 
     $ gem install starlight_fast_gettext
 
-## Usage
+## Credit
 
-TODO: Write usage instructions here
+My inspiration was [i18n-tasks](https://github.com/glebm/i18n-tasks) gem, which manages translations for I18n (Rails is using it). The reason I programmed this is I wanted something much simpler than [i18n-tasks](https://github.com/glebm/i18n-tasks) and I had desire to wrote something from scratch.
 
 ## Contributing
 
