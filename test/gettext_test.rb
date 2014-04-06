@@ -95,8 +95,21 @@ describe Starlight::FastGettext do
     assert_equal(true, File.exists?(file))
     
     trans = Roo::Excelx.new(file)
-    assert_equal [["_Key", "_Translation"], ["Welcome traveller", "Vitaj, cestovateľ"], ["Top", "Dohora"], ["Back", "Späť"], ["Missing One", nil], ["Unused", "Nepoužívaný"]], trans.sheet("sk").map{|row| row}
-    assert_equal [["_Key", "_Translation"], ["Welcome traveller", nil], ["Top", nil], ["Back", nil], ["Missing One", nil]], trans.sheet("en").map{|row| row}
+    assert_equal [
+      ["_Key", "_Translation"],
+      ["Welcome traveller", "Vitaj, cestovateľ"],
+      ["Top", "Dohora"],
+      ["Back", "Späť"],
+      ["Missing One", nil],
+      ["Unused", "Nepoužívaný"]
+    ], trans.sheet("sk").map{|row| row}
+    assert_equal [
+      ["_Key", "_Translation"],
+      ["Welcome traveller", nil],
+      ["Top", nil],
+      ["Back", nil],
+      ["Missing One", nil]
+    ], trans.sheet("en").map{|row| row}
     
     File.unlink(file)
   end
@@ -104,8 +117,29 @@ describe Starlight::FastGettext do
   it '#import_xlsx' do
     @translator.locales_dir = 'test/locales_import/'
     @translator.import_xlsx
-    assert_equal true, File.exists?(File.join(@translator.locales_dir, 'sk.yml'))
-    assert_equal true, File.exists?(File.join(@translator.locales_dir, 'en.yml'))
+    sk = File.join(@translator.locales_dir, 'sk.yml')
+    en = File.join(@translator.locales_dir, 'en.yml')
+    assert_equal true, File.exists?(sk)
+    assert_equal true, File.exists?(en)
+    
+    assert_equal({
+      "sk" => {
+        "Welcome traveller" => "Vitaj, cestovateľ",
+        "Top" => "Dohora",
+        "Back" => "Späť",
+        "Missing One" => nil,
+        "Unused" => 
+        "Nepoužívaný"
+      }
+    }, YAML::load_file(sk))
+    assert_equal({
+      "en" => {
+        "Welcome traveller" => nil,
+        "Top" => nil,
+        "Back" => nil,
+        "Missing One" => nil
+       }
+     }, YAML::load_file(en))
     
     FileUtils.rm_rf @translator.locales_dir
   end

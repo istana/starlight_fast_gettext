@@ -160,8 +160,9 @@ module Starlight
       
       all = {}
       s.sheets.each do |locale|
-        s.sheet(locale).each do |row|
-          all[locale] ||= {}
+        all[locale] ||= {}
+        s.sheet(locale).each_with_index do |row, i|
+          next if i == 0
           all[locale].deep_merge!(Hash[row[0], row[1]])
         end
       end 
@@ -184,7 +185,7 @@ module Starlight
     
     def write_translations(loc, translations)
       FileUtils.mkpath @locales_dir
-      File.write(File.join(@locales_dir, "#{loc}.yml"), YAML::dump(loc: translations))
+      File.write(File.join(@locales_dir, "#{loc}.yml"), YAML::dump(loc => translations))
     end
     
     def for_locale(options = {}, &block)
