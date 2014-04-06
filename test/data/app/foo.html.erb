@@ -1,0 +1,16 @@
+ 
+<% content_for :title do %>
+  <%= @page.metadata.title %>
+<% end %>
+
+<h1><%= _('Welcome traveller') %></h1>
+
+<p>You find here a lot of information about important things in your life.</p>
+  
+<div id="controls"><%= _('Top') %><%= _('Back') %>
+
+<div class="field">
+  <%= f.label :foo, _('Foo') %>
+  <%= f.check_box :foo, {name: 'foo'} %>
+
+<%= _('Only in ERb') %>

@@ -1,0 +1,16 @@
+- content_for :title do
+  = @page.metadata.title
+
+h1= _('Welcome traveller')
+
+p
+  You find here a lot of information about important things in your life.
+  
+#controls
+  = _('Top')
+  = _('Back')
+  
+
+.field
+  = f.label :foo, _('Foo')
+  = f.check_box :foo, {name: 'foo'}
