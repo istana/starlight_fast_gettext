@@ -1,4 +1,9 @@
-'Welcome traveller':
-Top:
-Back:
-'Missing One':
+---
+test/data/app/welcome.html.slim: 
+Welcome traveller: 
+Top: 
+Back: 
+Foo: 
+Missing One: 
+test/data/app/foo.html.erb: 
+Only in foo.html.erb: 

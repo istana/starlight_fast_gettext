@@ -1,4 +1,8 @@
 en:
+  test/data/app/welcome.html.slim: '_file_' 
   'Welcome traveller':
   Top:
   Back:
+  Foo:
+  test/data/app/foo.html.erb: '_file_'
+  Only in foo.html.erb:

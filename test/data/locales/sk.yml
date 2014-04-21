@@ -1,5 +1,9 @@
 sk:
+  test/data/app/welcome.html.slim: '_file_'
   'Welcome traveller': 'Vitaj, cestovateľ'
   Top: Dohora
   Back: Späť
+  Foo: Niečo
   Unused: Nepoužívaný
+  test/data/app/foo.html.erb: '_file_'
+  Only in foo.html.erb: Iba v foo.html.erb
