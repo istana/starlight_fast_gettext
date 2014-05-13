@@ -8,14 +8,13 @@ require 'axlsx'
 require 'roo'
 require 'fileutils'
 
-
 # The program is for management of translations
 # translations are stored in a YAML file as an hash
 # template is "empty translation" and is created by extracting translations from files
 # there are methods which returns the result and similar which writes the result to the file
 #
 class StarlightFastGettext
-	attr_accessor :locales, :locales_dir, :template_path, :export_file, :import_file
+	attr_accessor :locales, :locales_dir, :template_path, :export_file, :import_file, :rails_app
 	def initialize(options = {})
 		if defined?(Rails)
 			base = Rails.root
@@ -110,11 +109,12 @@ class StarlightFastGettext
 		@extract_rules.each do |rule|
 			path = File.join(@search_path, rule[:files])
 			log "Searching for #{path}"
+			extracted[rule[:id]] ||= {}
+
 			Dir[path].each do |f|
 				log "Processing #{f}"
 				content = File.read(f)
 
-				extracted[rule[:id]] ||= {}
 				extracted[rule[:id]][f] ||= []
 				# remove quotes from string
 				extracted[rule[:id]][f] += content.scan(rule[:regexp]).map do |arr|
@@ -137,8 +137,35 @@ class StarlightFastGettext
 		end
 	end
 
+	def extract_model_attributes
+		if @rails_app
+			if File.exists?(@rails_app)
+			 #	&& File.exists?(File.join(@rails_app, 'config', 'application'))
+				require_relative File.join(@rails_app, 'config', 'environment')
+				log("Rails application #{Rails.application} found")
+			else
+				log("Specified Rails application in '#{@rails_app}' doesn't exist", 'warn')
+			end
+		end
+
+		if !defined?(::Rails) || !defined?(::ActiveRecord::Base)
+			log('Rails not found, not extracting model attributes')
+			{}
+		elsif @rails_app
+			Rails.application.eager_load!
+			ActiveRecord::Base.descendants.reduce({}) do |r, model|
+				r[model.name] = "_model_"
+				model.attribute_names.each do |attr|
+					next if r.include?(attr.to_s)
+					r[attr.to_s] = nil
+				end
+				r
+			end
+		end
+	end
+
 	def extract_and_write_translations
-		write_template(extract_translations)
+		write_template(extract_translations.merge(extract_model_attributes))
 	end
 
 	# exports translations into xlsx 
